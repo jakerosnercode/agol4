@@ -82,7 +82,7 @@
 
       const usaeduLayer = new FeatureLayer({
         url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
-        outFields: ["NAME", "TOT_ENROLL"], // Make sure these are correct field names
+        outFields: ["NAME", "TOT_ENROLL"], // Ensure these field names match exactly
         popupTemplate: popupEduusa,
         renderer: {
           type: "simple",
@@ -106,7 +106,7 @@
           view.hitTest(event).then(function(response) {
             const graphic = response.results[0]?.graphic;
             if (graphic && graphic.layer === usaeduLayer) {
-              console.log(graphic.attributes); // Log the attributes to see what data is available
+              console.log(graphic.attributes); // Log attributes to check what data you get
               view.popup.open({
                 location: event.mapPoint,
                 features: [graphic]
@@ -128,65 +128,4 @@
 
       const polylineSymbol = {
         type: "simple-line",
-        color: [255, 0, 0],
-        width: 4
-      };
-
-      const polylineGraphic = new Graphic({
-        geometry: polyline,
-        symbol: polylineSymbol
-      });
-
-      graphicsLayer.add(polylineGraphic);
-
-      // Polygon
-      const polygon = {
-        type: "polygon",
-        rings: [
-          [-97.755, 30.261],
-          [-97.755, 30.266],
-          [-97.745, 30.266],
-          [-97.745, 30.261],
-          [-97.755, 30.261]
-        ]
-      };
-
-      const polygonSymbol = {
-        type: "simple-fill",
-        color: [0, 255, 0, 0.6],
-        outline: {
-          color: [0, 100, 0],
-          width: 2
-        }
-      };
-
-      const polygonGraphic = new Graphic({
-        geometry: polygon,
-        symbol: polygonSymbol
-      });
-
-      graphicsLayer.add(polygonGraphic);
-
-      // Go to polygon extent
-      view.goTo({
-        target: polygonGraphic.geometry,
-        zoom: 15
-      });
-
-    });
-  </script>
-
-  <!-- Fullscreen map styling -->
-  <style>
-    html, body, #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
-</head>
-<body>
-  <div id="viewDiv"></div>
-</body>
-</html>
+        color: [255, 0,
