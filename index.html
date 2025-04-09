@@ -128,4 +128,65 @@
 
       const polylineSymbol = {
         type: "simple-line",
-        color: [255, 0,
+        color: [255, 0, 0],
+        width: 4
+      };
+
+      const polylineGraphic = new Graphic({
+        geometry: polyline,
+        symbol: polylineSymbol
+      });
+
+      graphicsLayer.add(polylineGraphic);
+
+      // Polygon
+      const polygon = {
+        type: "polygon",
+        rings: [
+          [-97.755, 30.261],
+          [-97.755, 30.266],
+          [-97.745, 30.266],
+          [-97.745, 30.261],
+          [-97.755, 30.261]
+        ]
+      };
+
+      const polygonSymbol = {
+        type: "simple-fill",
+        color: [0, 255, 0, 0.6],
+        outline: {
+          color: [0, 100, 0],
+          width: 2
+        }
+      };
+
+      const polygonGraphic = new Graphic({
+        geometry: polygon,
+        symbol: polygonSymbol
+      });
+
+      graphicsLayer.add(polygonGraphic);
+
+      // Go to polygon extent
+      view.goTo({
+        target: polygonGraphic.geometry,
+        zoom: 15
+      });
+
+    });
+  </script>
+
+  <!-- Fullscreen map styling -->
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
