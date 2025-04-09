@@ -35,7 +35,7 @@
         });
 
         view.popup.enabled = true;
-        
+
         const graphicsLayer = new GraphicsLayer();  
         map.add(graphicsLayer);
 
@@ -76,6 +76,55 @@ popupTemplate: popupTemplate
 
 graphicsLayer.add(pointGraphic);
 
+ const polyline = {
+    type: "polyline",
+    paths: [
+      [-97.751, 30.263],
+      [-97.749, 30.264],
+      [-97.747, 30.265]
+    ]
+  };
+
+  const polylineSymbol = {
+    type: "simple-line",
+    color: [255, 0, 0], // Red line
+    width: 3
+  };
+
+  const polylineGraphic = new Graphic({
+    geometry: polyline,
+    symbol: polylineSymbol
+  });
+
+  graphicsLayer.add(polylineGraphic);
+
+  
+  const polygon = {
+    type: "polygon",
+    rings: [
+      [-97.751, 30.262],
+      [-97.751, 30.264],
+      [-97.749, 30.264],
+      [-97.749, 30.262],
+      [-97.751, 30.262]
+    ]
+  };
+
+  const polygonSymbol = {
+    type: "simple-fill",
+    color: [0, 255, 0, 0.3], // Green with transparency
+    outline: {
+      color: [0, 100, 0],
+      width: 2
+    }
+  };
+
+  const polygonGraphic = new Graphic({
+    geometry: polygon,
+    symbol: polygonSymbol
+  });
+
+  graphicsLayer.add(polygonGraphic);
 
     });
 
