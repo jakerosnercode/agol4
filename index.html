@@ -17,8 +17,9 @@
       "esri/views/MapView",
       "esri/Graphic",
       "esri/layers/GraphicsLayer",
-"esri/layers/FeatureLayer"
- ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer) {
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Popup"
+    ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Popup) {
 
       esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurEMEVQbKvAbZnpzPKZRxuMNtUzDq8ag3E3FbEUVJMU0hrtmVGRJepK1vokNRd6QHYHvJ59WIxIBvBCEs9cPVdWnD4aXedEaWZSNwNzqqh5gyGL2CcmseyfeF5Gt8e3Mi7KdSA7BcKz3dTA6_yKBu_g1SbTFM-Zp9MUafCKP5vn2qhGgQBFLx91QEhf6EinAD207CcjqmQhLAFQ4sF6MsT9U.AT1_xORu7DFJ";
 
@@ -74,25 +75,28 @@
 
       graphicsLayer.add(pointGraphic);
 
-      // Define a pop-up for usaeduLayer
-const popupEduusa = {
-  "title": "EDUs",
-  "content": "<b>Name:</b> {NAME}<br><b>Total Enrollment:</b> {TOT_ENROLL}<br>"
-}
+      // FeatureLayer: Colleges/Universities
+      const popupEduusa = {
+        title: "EDUs",
+        content: "<b>Name:</b> {NAME}<br><b>Total Enrollment:</b> {TOT_ENROLL}<br>"
+      };
 
-//adding the Const for the feature layer
-const usaeduLayer = new FeatureLayer({
-url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
+      const usaeduLayer = new FeatureLayer({
+        url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
+        outFields: ["NAME", "TOT_ENROLL"],
+        popupTemplate: popupEduusa
+      });
 
-//adding the popup here
-outFields: ["NAME","TOT_ENROLL"],
-popupTemplate: popupEduusa
- });
+      // Adding feature layer to the map
+      map.add(usaeduLayer);
 
-//adding the feature layer to the map
-map.add(usaeduLayer);
+      // Ensure that layer is loaded before enabling popups
+      view.whenLayerView(usaeduLayer).then(function(layerView) {
+        // Popups should now work once the layer is loaded
+        console.log("Feature layer loaded and ready");
+      });
 
-      // Polyline (extended & visible)
+      // Polyline
       const polyline = {
         type: "polyline",
         paths: [
@@ -104,7 +108,7 @@ map.add(usaeduLayer);
 
       const polylineSymbol = {
         type: "simple-line",
-        color: [255, 0, 0], // Red
+        color: [255, 0, 0],
         width: 4
       };
 
@@ -115,7 +119,7 @@ map.add(usaeduLayer);
 
       graphicsLayer.add(polylineGraphic);
 
-      // Polygon (larger & more opaque)
+      // Polygon
       const polygon = {
         type: "polygon",
         rings: [
@@ -143,7 +147,7 @@ map.add(usaeduLayer);
 
       graphicsLayer.add(polygonGraphic);
 
-      // Zoom to polygon
+      // Go to polygon extent
       view.goTo({
         target: polygonGraphic.geometry,
         zoom: 15
