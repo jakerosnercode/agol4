@@ -82,13 +82,12 @@
 
       const usaeduLayer = new FeatureLayer({
         url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
-        outFields: ["NAME", "TOT_ENROLL"],
+        outFields: ["NAME", "TOT_ENROLL"], // Make sure these are correct field names
         popupTemplate: popupEduusa,
-        // Set a simple symbol for visibility
         renderer: {
           type: "simple",
           symbol: {
-            type: "simple-marker", // Choose a marker symbol
+            type: "simple-marker",
             color: "blue",
             size: 8
           }
@@ -107,6 +106,7 @@
           view.hitTest(event).then(function(response) {
             const graphic = response.results[0]?.graphic;
             if (graphic && graphic.layer === usaeduLayer) {
+              console.log(graphic.attributes); // Log the attributes to see what data is available
               view.popup.open({
                 location: event.mapPoint,
                 features: [graphic]
