@@ -112,10 +112,12 @@
 };
 
 
-      const airportLayer = new FeatureLayer({
-          url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports/FeatureServer",
-          renderer: airportRenderer
-        });
+const airportsLayer = new FeatureLayer({
+  url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/US_AirportsforJR/FeatureServer",
+  outFields: ["FACILITY", "CITY", "STATE"],
+  popupTemplate: popupAirports,
+  renderer: airportRenderer  
+});
 
       map.add(airportsLayer);
 
