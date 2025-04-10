@@ -4,7 +4,6 @@
   <title>Hello, AGOL!</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="" />
 
   <!-- ArcGIS API -->
   <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
@@ -38,7 +37,7 @@
       const graphicsLayer = new GraphicsLayer();
       map.add(graphicsLayer);
 
-      // Point
+      // Stevie Ray Vaughan Point
       const point = {
         type: "point",
         longitude: -97.750689,
@@ -74,15 +73,15 @@
 
       graphicsLayer.add(pointGraphic);
 
-      // FeatureLayer: Colleges/Universities
+      // EDU USA FeatureLayer
       const popupEduusa = {
         title: "EDUs",
-        content: "<b>Institution Name:</b> {INSTNM}<br><b>Address:</b> {ADDR}<br> <b>ZIP:</b> {ZIP}<br>"
+        content: "<b>Name:</b> {NAME}<br><b>Total Enrollment:</b> {TOT_ENROLL}<br>"
       };
 
       const usaeduLayer = new FeatureLayer({
         url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
-        outFields: ["INSTNM", "ADDR"], // Ensure these field names match exactly
+        outFields: ["NAME", "TOT_ENROLL"],
         popupTemplate: popupEduusa,
         renderer: {
           type: "simple",
@@ -94,27 +93,29 @@
         }
       });
 
-      // Adding feature layer to the map
       map.add(usaeduLayer);
 
-      // Ensure that layer is loaded before enabling popups
-      view.whenLayerView(usaeduLayer).then(function(layerView) {
-        console.log("Feature layer loaded and ready");
+      // CHALLENGE 4: US Airports FeatureLayer
+      const popupAirports = {
+        title: "Airport",
+        content: "<b>Name:</b> {FACILITY}<br><b>City:</b> {CITY}<br><b>State:</b> {STATE}<br>"
+      };
 
-        // Add a click event listener to show the popup when clicking on features
-        view.on("click", function(event) {
-          view.hitTest(event).then(function(response) {
-            const graphic = response.results[0]?.graphic;
-            if (graphic && graphic.layer === usaeduLayer) {
-              console.log(graphic.attributes); // Log attributes to check what data you get
-              view.popup.open({
-                location: event.mapPoint,
-                features: [graphic]
-              });
-            }
-          });
-        });
+      const airportsLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/US_AirportsforJR/FeatureServer",
+        outFields: ["FACILITY", "CITY", "STATE"],
+        popupTemplate: popupAirports,
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "simple-marker",
+            color: "orange",
+            size: 6
+          }
+        }
       });
+
+      map.add(airportsLayer);
 
       // Polyline
       const polyline = {
@@ -167,7 +168,7 @@
 
       graphicsLayer.add(polygonGraphic);
 
-      // Go to polygon extent
+      // Zoom to Polygon
       view.goTo({
         target: polygonGraphic.geometry,
         zoom: 15
