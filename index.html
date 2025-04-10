@@ -102,14 +102,15 @@
       };
 
       const airportRenderer = {
-        "type": "simple",
-        "symbol": {
-          "type": "picture-marker",
-          "url": "https://github.com/jakerosnercode/agol1/blob/main/local_airport_24dp_1F1F1F.png",
-          "width": "18px",
-          "height": "18px"
-        }
-      }
+  type: "simple",
+  symbol: {
+    type: "picture-marker",
+    url: "https://raw.githubusercontent.com/jakerosnercode/agol1/main/local_airport_24dp_1F1F1F.png",
+    width: "18px",
+    height: "18px"
+  }
+};
+
 
       const airportLayer = new FeatureLayer({
           url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports/FeatureServer",
