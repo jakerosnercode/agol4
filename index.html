@@ -117,20 +117,6 @@
           renderer: airportRenderer
         });
 
-      const airportsLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/US_AirportsforJR/FeatureServer",
-        outFields: ["FACILITY", "CITY", "STATE"],
-        popupTemplate: popupAirports,
-        renderer: {
-          type: "simple",
-          symbol: {
-            type: "simple-marker",
-            color: "orange",
-            size: 6
-          }
-        }
-      });
-
       map.add(airportsLayer);
 
       // Polyline
