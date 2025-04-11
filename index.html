@@ -119,7 +119,82 @@ const airportsLayer = new FeatureLayer({
   renderer: airportRenderer  
 });
 
+//const to make the airport labels
+const airportLabels = {
+  symbol: {
+    type: "text",
+    color: "#FFFFFF",
+    haloColor: "#5E8D74",
+    haloSize: "2px",
+    font: {
+      size: "12px",
+      family: "Noto Sans",
+      style: "italic",
+      weight: "normal"
+    }
+  },
+  labelPlacement: "above-center",
+  labelExpressionInfo: {
+    expression: "$feature.Fac_Name"
+  }
+};
+
+const airportLayer = new FeatureLayer({
+  url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports/FeatureServer",
+  renderer: airportRenderer, //calling the icon
+  definitionExpression: "Fac_Type = 'AIRPORT'", //adding sql to filter for airports
+  labelingInfo: [airportLabels] //adding the labels
+});
+
       map.add(airportsLayer);
+
+      const heliportRenderer = {
+        "type": "simple",
+        "symbol": {
+          "type": "picture-marker",
+          "url": "https://github.com/jakerosnercode/agol1/blob/main/pin_drop_24dp_1F1F1F.png",
+          "width": "18px",
+          "height": "18px"
+        }
+      }
+
+      const heliportLayer = new FeatureLayer({
+url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports/FeatureServer",
+renderer: heliportRenderer, //calling the icon
+definitionExpression: "Fac_Type = 'HELIPORT'" //adding sql to filter for airports
+});
+
+const heliportLabels = {
+  symbol: {
+    type: "text",
+    color: "#FFFFFF",
+    haloColor: "#5E8D74",
+    haloSize: "2px",
+    font: {
+      size: "12px",
+      family: "Noto Sans",
+      style: "italic",
+      weight: "normal"
+    }
+  },
+  labelPlacement: "above-center",
+  labelExpressionInfo: {
+    expression: "$feature.Fac_Name"
+  }
+};
+
+const heliportLayer = new FeatureLayer({
+  url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports/FeatureServer",
+  renderer: heliportRenderer, //calling the icon
+  definitionExpression: "Fac_Type = 'HELIPORT'", //adding sql to filter for airports
+  labelingInfo: [heliportLabels] //adding the labels
+});
+
+
+
+      map.add(heliportLayer);
+
+
 
       // Polyline
       const polyline = {
