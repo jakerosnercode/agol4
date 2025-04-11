@@ -96,30 +96,27 @@
       map.add(usaeduLayer);
 
       // CHALLENGE 4: US Airports FeatureLayer
-      const popupAirports = {
-        title: "Airport",
-        content: "<b>Name:</b> {FACILITY}<br><b>City:</b> {CITY}<br><b>State:</b> {STATE}<br>"
-      };
-
       const airportRenderer = {
   type: "simple",
   symbol: {
     type: "picture-marker",
     url: "https://developers.arcgis.com/javascript/latest/sample-code/sandbox/graphics/pin-blue.png",
-    width: "18px",
-    height: "18px"
+    width: "24px",
+    height: "24px"
   }
 };
-
 
 const airportsLayer = new FeatureLayer({
   url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/US_AirportsforJR/FeatureServer",
   outFields: ["FACILITY", "CITY", "STATE"],
-  popupTemplate: popupAirports,
-  renderer: airportRenderer  
+  popupTemplate: {
+    title: "Airport",
+    content: "<b>Name:</b> {FACILITY}<br><b>City:</b> {CITY}<br><b>State:</b> {STATE}<br>"
+  },
+  renderer: airportRenderer
 });
 
-      map.add(airportsLayer);
+map.add(airportsLayer);
 
       // Polyline
       const polyline = {
