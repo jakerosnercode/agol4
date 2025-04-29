@@ -17,8 +17,9 @@
       "esri/Graphic",
       "esri/layers/GraphicsLayer",
       "esri/layers/FeatureLayer",
-      "esri/widgets/Editor"
-    ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Editor) {
+      "esri/widgets/Editor",
+      "esri/widgets/Legend"
+    ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Editor, Legend) {
 
       esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurEMEVQbKvAbZnpzPKZRxuMNtUzDq8ag3E3FbEUVJMU0hrtmVGRJepK1vokNRd6QHYHvJ59WIxIBvBCEs9cPVdWnD4aXedEaWZSNwNzqqh5gyGL2CcmseyfeF5Gt8e3Mi7KdSA7BcKz3dTA6_yKBu_g1SbTFM-Zp9MUafCKP5vn2qhGgQBFLx91QEhf6EinAD207CcjqmQhLAFQ4sF6MsT9U.AT1_xORu7DFJ";
 
@@ -138,17 +139,49 @@
 
       map.add(airportLayer);
 
-//adding the const for the feature layer
-const myAirports = new FeatureLayer({
- url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/My_Airports2/FeatureServer",
- 
- //adding the popup here
- outFields: ["AirportCode"],
+      // --- CHALLENGE 1: Custom Symbol ---
+      const myAirportsRenderer = {
+        type: "simple",
+        symbol: {
+          type: "picture-marker",
+          url: "https://raw.githubusercontent.com/jakerosnercode/agol1/main/airport_terminal_24dp_1F1F1F.png",
+          width: "24px",
+          height: "24px"
+        }
+      };
 
-});
+      // --- CHALLENGE 2: Label Showing AirportCode ---
+      const myAirportsLabel = {
+        symbol: {
+          type: "text",
+          color: "#000000",
+          haloColor: "#FFFFFF",
+          haloSize: "1px",
+          font: {
+            size: 12,
+            family: "Arial",
+            weight: "bold"
+          }
+        },
+        labelPlacement: "above-center",
+        labelExpressionInfo: {
+          expression: "$feature.AirportCode"
+        }
+      };
 
-//adding the feature layer to the map
-map.add(myAirports);
+      const myAirports = new FeatureLayer({
+        url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/My_Airports2/FeatureServer",
+        renderer: myAirportsRenderer,
+        labelingInfo: [myAirportsLabel],
+        outFields: ["AirportCode"],
+        popupTemplate: {
+          title: "My Airport",
+          content: "<b>Code:</b> {AirportCode}"
+        }
+      });
+
+      map.add(myAirports);
+
       // --- Heliports ---
       const heliportRenderer = {
         type: "simple",
@@ -244,25 +277,46 @@ map.add(myAirports);
 
       graphicsLayer.add(polygonGraphic);
 
-      // Zoom to polygon
       view.goTo({
         target: polygonGraphic.geometry,
         zoom: 15
       });
 
-// Set the point layer's LayerInfo
-const pointInfos = {
- layer: myAirports
-}
+      const pointInfos = {
+        layer: myAirports
+      };
 
-// Begin Editor constructor
-const editor = new Editor({
- view: view,
- layerInfos: [pointInfos]
- }); // End Editor constructor
+      const editor = new Editor({
+        view: view,
+        layerInfos: [pointInfos]
+      });
 
-// Add the widget to the view
-view.ui.add(editor, "top-right");
+      view.ui.add(editor, "top-right");
+
+      // --- CHALLENGE 3: Add Legend Widget ---
+      const legend = new Legend({
+        view: view,
+        layerInfos: [
+          {
+            layer: myAirports,
+            title: "My Airports"
+          },
+          {
+            layer: airportLayer,
+            title: "Airports"
+          },
+          {
+            layer: heliportLayer,
+            title: "Heliports"
+          },
+          {
+            layer: usaeduLayer,
+            title: "Colleges & Universities"
+          }
+        ]
+      });
+
+      view.ui.add(legend, "bottom-left");
 
     });
   </script>
