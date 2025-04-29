@@ -138,6 +138,17 @@
 
       map.add(airportLayer);
 
+//adding the const for the feature layer
+const myAirports = new FeatureLayer({
+ url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/My_Airports2/FeatureServer",
+ 
+ //adding the popup here
+ outFields: ["AirportCode"],
+
+});
+
+//adding the feature layer to the map
+map.add(myAirports);
       // --- Heliports ---
       const heliportRenderer = {
         type: "simple",
