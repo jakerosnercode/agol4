@@ -90,3 +90,193 @@
             size: 8
           }
         }
+      });
+
+      map.add(usaeduLayer);
+
+      // --- Airports ---
+      const airportRenderer = {
+        type: "simple",
+        symbol: {
+          type: "picture-marker",
+          url: "https://raw.githubusercontent.com/jakerosnercode/agol1/main/local_airport_24dp_1F1F1F.png",
+          width: "18px",
+          height: "18px"
+        }
+      };
+
+      const airportLabels = {
+        symbol: {
+          type: "text",
+          color: "#FFFFFF",
+          haloColor: "#5E8D74",
+          haloSize: "2px",
+          font: {
+            size: "12px",
+            family: "Noto Sans",
+            style: "italic",
+            weight: "normal"
+          }
+        },
+        labelPlacement: "above-center",
+        labelExpressionInfo: {
+          expression: "$feature.Fac_Name"
+        }
+      };
+
+      const airportLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports/FeatureServer",
+        renderer: airportRenderer,
+        definitionExpression: "Fac_Type = 'AIRPORT'",
+        labelingInfo: [airportLabels],
+        outFields: ["FACILITY", "CITY", "STATE"],
+        popupTemplate: {
+          title: "Airport",
+          content: "<b>Name:</b> {FACILITY}<br><b>City:</b> {CITY}<br><b>State:</b> {STATE}<br>"
+        }
+      });
+
+      map.add(airportLayer);
+
+//adding the const for the feature layer
+const myAirports = new FeatureLayer({
+ url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/My_Airports2/FeatureServer",
+ 
+ //adding the popup here
+ outFields: ["AirportCode"],
+
+});
+
+//adding the feature layer to the map
+map.add(myAirports);
+      // --- Heliports ---
+      const heliportRenderer = {
+        type: "simple",
+        symbol: {
+          type: "picture-marker",
+          url: "https://raw.githubusercontent.com/jakerosnercode/agol1/main/pin_drop_24dp_1F1F1F.png",
+          width: "18px",
+          height: "18px"
+        }
+      };
+
+      const heliportLabels = {
+        symbol: {
+          type: "text",
+          color: "#FFFFFF",
+          haloColor: "#5E8D74",
+          haloSize: "2px",
+          font: {
+            size: "12px",
+            family: "Noto Sans",
+            style: "italic",
+            weight: "normal"
+          }
+        },
+        labelPlacement: "above-center",
+        labelExpressionInfo: {
+          expression: "$feature.Fac_Name"
+        }
+      };
+
+      const heliportLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports/FeatureServer",
+        renderer: heliportRenderer,
+        definitionExpression: "Fac_Type = 'HELIPORT'",
+        labelingInfo: [heliportLabels],
+        outFields: ["FACILITY", "CITY", "STATE"],
+        popupTemplate: {
+          title: "Heliport",
+          content: "<b>Name:</b> {FACILITY}<br><b>City:</b> {CITY}<br><b>State:</b> {STATE}<br>"
+        }
+      });
+
+      map.add(heliportLayer);
+
+      // Polyline
+      const polyline = {
+        type: "polyline",
+        paths: [
+          [-97.76, 30.26],
+          [-97.74, 30.265],
+          [-97.72, 30.27]
+        ]
+      };
+
+      const polylineSymbol = {
+        type: "simple-line",
+        color: [255, 0, 0],
+        width: 4
+      };
+
+      const polylineGraphic = new Graphic({
+        geometry: polyline,
+        symbol: polylineSymbol
+      });
+
+      graphicsLayer.add(polylineGraphic);
+
+      // Polygon
+      const polygon = {
+        type: "polygon",
+        rings: [
+          [-97.755, 30.261],
+          [-97.755, 30.266],
+          [-97.745, 30.266],
+          [-97.745, 30.261],
+          [-97.755, 30.261]
+        ]
+      };
+
+      const polygonSymbol = {
+        type: "simple-fill",
+        color: [0, 255, 0, 0.6],
+        outline: {
+          color: [0, 100, 0],
+          width: 2
+        }
+      };
+
+      const polygonGraphic = new Graphic({
+        geometry: polygon,
+        symbol: polygonSymbol
+      });
+
+      graphicsLayer.add(polygonGraphic);
+
+      // Zoom to polygon
+      view.goTo({
+        target: polygonGraphic.geometry,
+        zoom: 15
+      });
+
+// Set the point layer's LayerInfo
+const pointInfos = {
+ layer: myAirports
+}
+
+// Begin Editor constructor
+const editor = new Editor({
+ view: view,
+ layerInfos: [pointInfos]
+ }); // End Editor constructor
+
+// Add the widget to the view
+view.ui.add(editor, "top-right");
+
+    });
+  </script>
+
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html> 
