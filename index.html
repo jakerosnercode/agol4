@@ -9,6 +9,18 @@
   <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.25/"></script>
 
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="viewDiv"></div>
+
   <script>
     require([
       "esri/config",
@@ -139,7 +151,7 @@
 
       map.add(airportLayer);
 
-      // --- CHALLENGE 1: Custom Symbol ---
+      // --- My Airports Layer with icon and label ---
       const myAirportsRenderer = {
         type: "simple",
         symbol: {
@@ -150,15 +162,14 @@
         }
       };
 
-      // --- CHALLENGE 2: Label Showing AirportCode ---
-      const myAirportsLabel = {
+      const myAirportLabels = {
         symbol: {
           type: "text",
           color: "#000000",
           haloColor: "#FFFFFF",
           haloSize: "1px",
           font: {
-            size: 12,
+            size: "11px",
             family: "Arial",
             weight: "bold"
           }
@@ -172,12 +183,9 @@
       const myAirports = new FeatureLayer({
         url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/My_Airports2/FeatureServer",
         renderer: myAirportsRenderer,
-        labelingInfo: [myAirportsLabel],
+        labelingInfo: [myAirportLabels],
         outFields: ["AirportCode"],
-        popupTemplate: {
-          title: "My Airport",
-          content: "<b>Code:</b> {AirportCode}"
-        }
+        title: "My Airports"
       });
 
       map.add(myAirports);
@@ -277,60 +285,27 @@
 
       graphicsLayer.add(polygonGraphic);
 
+      // Zoom to polygon
       view.goTo({
         target: polygonGraphic.geometry,
         zoom: 15
       });
 
-      const pointInfos = {
-        layer: myAirports
-      };
-
+      // Editor widget
       const editor = new Editor({
         view: view,
-        layerInfos: [pointInfos]
+        layerInfos: [{ layer: myAirports }]
       });
-
       view.ui.add(editor, "top-right");
 
-      // --- CHALLENGE 3: Add Legend Widget ---
+      // Legend widget
       const legend = new Legend({
-        view: view,
-        layerInfos: [
-          {
-            layer: myAirports,
-            title: "My Airports"
-          },
-          {
-            layer: airportLayer,
-            title: "Airports"
-          },
-          {
-            layer: heliportLayer,
-            title: "Heliports"
-          },
-          {
-            layer: usaeduLayer,
-            title: "Colleges & Universities"
-          }
-        ]
+        view: view
       });
-
       view.ui.add(legend, "bottom-left");
 
     });
   </script>
-
-  <style>
-    html, body, #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
-</head>
-<body>
-  <div id="viewDiv"></div>
 </body>
 </html>
+
