@@ -250,6 +250,20 @@ map.add(myAirports);
         zoom: 15
       });
 
+// Set the point layer's LayerInfo
+const pointInfos = {
+ layer: myAirports
+}
+
+// Begin Editor constructor
+const editor = new Editor({
+ view: view,
+ layerInfos: [pointInfos]
+ }); // End Editor constructor
+
+// Add the widget to the view
+view.ui.add(editor, "top-right");
+
     });
   </script>
 
